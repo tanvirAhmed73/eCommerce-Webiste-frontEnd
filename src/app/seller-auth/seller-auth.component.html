@@ -1,10 +1,15 @@
 <div class="floating-circles-container"></div>
 
 <div class="form-page">
-  <!-- IF SIGN UP CLICK -->
+  <!-- IF SIGN-UP CLICK -->
   <div *ngIf="signUpToggle" class="form-area">
     <!-- sign up form -->
-    <form class="signUpForm" action="">
+    <form
+      [formGroup]="sellerSignUpForm"
+      (ngSubmit)="onSignUpSubmit()"
+      class="signUpForm"
+      action=""
+    >
       <header>Register</header>
       <!--seller-name -->
       <div class="input-field">
@@ -20,7 +25,7 @@
           </svg>
           <span>Name</span>
         </label>
-        <input type="text" name="sellerName" />
+        <input type="text" name="sellerName" formControlName="sellerName" />
       </div>
       <!-- seller email -->
       <div class="input-field">
@@ -37,7 +42,7 @@
           </svg>
           <span>Email</span>
         </label>
-        <input type="email" name="sellerEmail" />
+        <input type="email" name="sellerEmail" formControlName="sellerEmail" />
       </div>
       <!-- Password -->
       <div class="input-field">
@@ -54,7 +59,7 @@
           </svg>
           <span>Password</span>
         </label>
-        <input type="password" name="password" />
+        <input type="password" name="password" formControlName="password" />
       </div>
       <!-- confirm password -->
       <div class="input-field">
@@ -71,7 +76,11 @@
           </svg>
           <span>Confirm Password</span>
         </label>
-        <input type="password" name="confirm-password" />
+        <input
+          type="password"
+          name="confirm-password"
+          formControlName="confirmPassword"
+        />
       </div>
 
       <button class="submit-button">Submit</button>

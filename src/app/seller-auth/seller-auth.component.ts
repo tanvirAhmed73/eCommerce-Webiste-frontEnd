@@ -18,37 +18,41 @@ import { AuthService } from '../core/services/auth/auth.service';
 export class SellerAuthComponent implements OnInit {
   sellerSignUpForm!: FormGroup;
 
-  // for toggle
-  signUpToggle = true;
-  loginToggle = false;
-
-  showFire = false;
   // service
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private http: HttpClient,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.generateFloatingCircles();
     this.authService.reloadSeller();
+
     this.sellerSignUpForm = this.fb.group({
       sellerName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      sellerEmail: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
-  onsubmitSellerForm(): void {
-    console.log(this.sellerSignUpForm);
-    if (this.sellerSignUpForm.valid) {
-      const formData = this.sellerSignUpForm.value;
-      this.authService.sellerSignUP(formData);
-    } else {
-      console.log('form is invalid');
+
+  onSignUpSubmit(): void {
+    if (!this.sellerSignUpForm.invalid) {
+      if (
+        this.sellerSignUpForm.value.password ===
+        this.sellerSignUpForm.value.confirmPassword
+      ) {
+        // call the api
+        this.authService.sellerSignUP(this.sellerSignUpForm.value);
+      } else {
+        // send the error
+        console.log('send the error');
+      }
     }
   }
+
   generateFloatingCircles(): void {
     const container = document.querySelector('.floating-circles-container');
     const numberOfCircles = 80; // Define how many circles you want
@@ -74,6 +78,10 @@ export class SellerAuthComponent implements OnInit {
       this.renderer.appendChild(container, circle);
     }
   }
+
+  // for toggle between signUP and Login form
+  signUpToggle = true;
+  loginToggle = false;
 
   openLogin() {
     this.signUpToggle = false;
